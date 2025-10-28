@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coffee.userservice.mapper.UserMapper">
+    
+    <resultMap id="userResultMap" type="com.coffee.userservice.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="openid" property="openid"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="nickname" property="nickname"/>
+        <result column="city" property="city"/>
+        <result column="province" property="province"/>
+        <result column="country" property="country"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gender" property="gender"/>
+        <result column="birthday" property="birthday"/>
+        <result column="points" property="points"/>
+        <result column="member_level" property="memberLevel"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" resultMap="userResultMap">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+    
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUsername" resultMap="userResultMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+    
+    <!-- 根据手机号查询用户 -->
+    <select id="selectByPhone" resultMap="userResultMap">
+        SELECT * FROM users WHERE phone = #{phone}
+    </select>
+    
+    <!-- 根据邮箱查询用户 -->
+    <select id="selectByEmail" resultMap="userResultMap">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+    
+    <!-- 根据昵称查询用户 -->
+    <select id="selectByNickname" resultMap="userResultMap">
+        SELECT * FROM users WHERE nickname = #{nickname}
+    </select>
+    
+    <!-- 根据openid查询用户 -->
+    <select id="selectByOpenid" resultMap="userResultMap">
+        SELECT * FROM users 
+        WHERE openid = #{openid} 
+        AND openid IS NOT NULL
+        AND openid != ''
+    </select>
+    
+    <!-- 查询用户列表 -->
+    <select id="selectList" resultMap="userResultMap">
+        SELECT * FROM users
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone LIKE CONCAT('%', #{phone}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    
+    <!-- 查询所有用户（简化版） -->
+    <select id="selectAll" resultMap="userResultMap">
+        SELECT * FROM users ORDER BY create_time DESC
+    </select>
+    
+    <!-- 插入用户 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (username, password, phone, email, nickname, avatar, gender, birthday, points, member_level, status)
+        VALUES (#{username}, #{password}, #{phone}, #{email}, #{nickname}, #{avatar}, #{gender}, #{birthday}, #{points}, #{memberLevel}, #{status})
+    </insert>
+    
+    <!-- 更新用户 -->
+    <update id="update">
+        UPDATE users
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="points != null">points = #{points},</if>
+            <if test="memberLevel != null">member_level = #{memberLevel},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据ID删除用户 -->
+    <delete id="deleteById">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+    
+    <!-- 更新用户积分 -->
+    <update id="updatePoints">
+        UPDATE users SET points = #{points} WHERE id = #{id}
+    </update>
+    
+    <!-- 更新用户会员等级 -->
+    <update id="updateMemberLevel">
+        UPDATE users SET member_level = #{memberLevel} WHERE id = #{id}
+    </update>
+    
+</mapper>
+

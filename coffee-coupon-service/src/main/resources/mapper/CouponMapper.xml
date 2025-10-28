@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coffee.couponservice.mapper.CouponMapper">
+
+    <resultMap id="BaseResultMap" type="com.coffee.couponservice.entity.Coupon">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="discount_value" property="discountValue" jdbcType="DECIMAL"/>
+        <result column="min_amount" property="minAmount" jdbcType="DECIMAL"/>
+        <result column="total_count" property="totalCount" jdbcType="INTEGER"/>
+        <result column="used_count" property="usedCount" jdbcType="INTEGER"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, type, discount_value, min_amount, total_count, used_count, 
+        start_time, end_time, status, create_time, update_time
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM coupons
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectAvailableCoupons" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM coupons
+        WHERE status = 1
+        AND start_time &lt;= NOW()
+        AND end_time &gt;= NOW()
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="updateUsedCount">
+        UPDATE coupons
+        SET used_count = #{usedCount},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="com.coffee.couponservice.entity.Coupon" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO coupons (
+            name, type, discount_value, min_amount, total_count, used_count,
+            start_time, end_time, status, create_time, update_time
+        ) VALUES (
+            #{name}, #{type}, #{discountValue}, #{minAmount}, #{totalCount}, #{usedCount},
+            #{startTime}, #{endTime}, #{status}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.coffee.couponservice.entity.Coupon">
+        UPDATE coupons
+        SET name = #{name},
+            type = #{type},
+            discount_value = #{discountValue},
+            min_amount = #{minAmount},
+            total_count = #{totalCount},
+            used_count = #{usedCount},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM coupons WHERE id = #{id}
+    </delete>
+
+    <select id="selectCouponList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM coupons
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="countCoupons" resultType="long">
+        SELECT COUNT(1)
+        FROM coupons
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+        </where>
+    </select>
+
+</mapper>

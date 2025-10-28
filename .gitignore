@@ -1,0 +1,47 @@
+# ===== Java/Maven 后端通用忽略 =====
+
+# IDE
+.idea/
+*.iml
+
+# 构建产物
+**/target/
+**/build/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven/Gradle 杂项
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.exe
+.mvn/timing.properties
+.gradle/
+
+# 生成目录
+**/generated-sources/
+**/generated-test-sources/
+
+# 日志与临时
+logs/
+*.log
+.tmp/
+.tmp*/
+
+# Docker/环境
+.env
+.env.*
+**/.env
+
+# 敏感配置（保留 *-example.yml 在仓库）
+**/application.yml
+**/application-*.yml
+**/bootstrap.yml
+**/bootstrap-*.yml
+# 示例配置不忽略（如需使用请创建对应 example 文件）
+# !**/application-example.yml
+# !**/bootstrap-example.yml
+
+# 操作系统
+.DS_Store
+Thumbs.db

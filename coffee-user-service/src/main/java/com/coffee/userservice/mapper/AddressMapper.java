@@ -52,3 +52,4 @@ public interface AddressMapper {
      */
     int setDefault(@Param("id") Long id, @Param("userId") Long userId);
 }
+

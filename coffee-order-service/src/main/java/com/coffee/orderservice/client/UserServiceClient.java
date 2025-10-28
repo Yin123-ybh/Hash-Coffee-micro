@@ -23,3 +23,4 @@ public interface UserServiceClient {
     @GetMapping("/user/{id}")
     Result<Object> getUserById(@PathVariable("id") Long id);
 }
+

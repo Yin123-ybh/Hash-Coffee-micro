@@ -3,6 +3,8 @@ package com.coffee.couponservice.service.impl;
 import com.coffee.common.result.Result;
 import com.coffee.couponservice.dto.SeckillRequest;
 import com.coffee.couponservice.dto.SeckillResult;
+import com.coffee.couponservice.entity.Coupon;
+import com.coffee.couponservice.mapper.CouponMapper;
 import com.coffee.couponservice.service.CouponSeckillService;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -31,6 +33,9 @@ public class CouponSeckillServiceImpl implements CouponSeckillService {
     
     @Autowired
     private RedissonClient redissonClient;
+    
+    @Autowired
+    private CouponMapper couponMapper;
     
     // Lua脚本：原子性扣减库存
     private DefaultRedisScript<Long> seckillScript;
@@ -88,6 +93,9 @@ public class CouponSeckillServiceImpl implements CouponSeckillService {
                     seckillResult.setCouponId(couponId);
                     seckillResult.setUserId(userId);
                     seckillResult.setMessage("秒杀成功");
+                    
+                    // 同步更新数据库库存
+                    syncDatabaseStock(couponId);
                     
                     // 异步处理后续业务逻辑（发送MQ消息）
                     // 这里可以发送消息到RabbitMQ进行异步处理
@@ -170,4 +178,39 @@ public class CouponSeckillServiceImpl implements CouponSeckillService {
                "    return 0\n" +
                "end";
     }
+    
+    /**
+     * 同步数据库库存
+     * 根据Redis中的库存更新数据库中的used_count
+     */
+    private void syncDatabaseStock(Long couponId) {
+        try {
+            // 获取Redis中的剩余库存
+            Integer redisStock = getSeckillStock(couponId);
+            if (redisStock == null) {
+                log.warn("Redis中未找到优惠券 {} 的库存信息", couponId);
+                return;
+            }
+            
+            // 获取数据库中的优惠券信息
+            Coupon coupon = couponMapper.selectById(couponId);
+            if (coupon == null) {
+                log.warn("数据库中未找到优惠券 {}", couponId);
+                return;
+            }
+            
+            // 计算已使用数量
+            Integer totalCount = coupon.getTotalCount() != null ? coupon.getTotalCount() : 0;
+            Integer usedCount = Math.max(0, totalCount - redisStock);
+            
+            // 更新数据库
+            couponMapper.updateUsedCount(couponId, usedCount);
+            
+            log.info("同步数据库库存成功: 优惠券ID={}, 总库存={}, 已使用={}, 剩余={}", 
+                    couponId, totalCount, usedCount, redisStock);
+        } catch (Exception e) {
+            log.error("同步数据库库存失败: 优惠券ID={}", couponId, e);
+        }
+    }
 }
+

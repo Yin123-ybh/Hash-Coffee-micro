@@ -37,3 +37,4 @@ public class SeckillActivity {
     private Integer couponType;
 }
 
+

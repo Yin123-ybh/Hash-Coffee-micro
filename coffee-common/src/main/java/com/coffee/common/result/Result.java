@@ -78,3 +78,4 @@ public class Result<T> {
         return new Result<>(404, message, null);
     }
 }
+

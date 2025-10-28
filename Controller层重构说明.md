@@ -106,3 +106,4 @@ public Result<List<Address>> getAddressList(HttpServletRequest request) {
 1. 可以为UserController创建Service层（目前看起来逻辑较简单）
 2. 考虑创建统一的AOP切面处理用户认证
 3. 可以考虑使用拦截器统一处理用户ID获取
+

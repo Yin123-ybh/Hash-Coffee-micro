@@ -15,3 +15,4 @@ public class CouponServiceApplication {
         SpringApplication.run(CouponServiceApplication.class, args);
     }
 }
+

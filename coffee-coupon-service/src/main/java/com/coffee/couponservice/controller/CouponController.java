@@ -197,4 +197,45 @@ public class CouponController {
             return Result.error("检查失败: " + e.getMessage());
         }
     }
+    
+    /**
+     * 同步库存状态
+     */
+    @PostMapping("/coupon/sync-stock/{couponId}")
+    public Result<String> syncStock(@PathVariable Long couponId) {
+        try {
+            // 获取数据库中的优惠券信息
+            Coupon coupon = couponService.getCouponById(couponId);
+            if (coupon == null) {
+                return Result.error("优惠券不存在");
+            }
+            
+            // 获取Redis中的库存
+            Integer redisStock = couponSeckillService.getSeckillStock(couponId);
+            
+            // 如果Redis中没有库存，使用数据库库存初始化
+            if (redisStock == null || redisStock < 0) {
+                Integer totalCount = coupon.getTotalCount() != null ? coupon.getTotalCount() : 0;
+                Integer usedCount = coupon.getUsedCount() != null ? coupon.getUsedCount() : 0;
+                Integer remainingStock = Math.max(0, totalCount - usedCount);
+                
+                couponSeckillService.initSeckillStock(couponId, remainingStock);
+                
+                log.info("初始化Redis库存: 优惠券ID={}, 库存={}", couponId, remainingStock);
+                return Result.success("库存同步成功，已初始化Redis库存: " + remainingStock);
+            } else {
+                // 同步数据库库存
+                Integer totalCount = coupon.getTotalCount() != null ? coupon.getTotalCount() : 0;
+                Integer usedCount = Math.max(0, totalCount - redisStock);
+                couponService.updateCouponUsedCount(couponId, usedCount);
+                
+                log.info("同步数据库库存: 优惠券ID={}, Redis库存={}, 数据库已使用={}", 
+                        couponId, redisStock, usedCount);
+                return Result.success("库存同步成功，Redis库存: " + redisStock + ", 数据库已使用: " + usedCount);
+            }
+        } catch (Exception e) {
+            log.error("同步库存失败: {}", e.getMessage());
+            return Result.error("同步失败: " + e.getMessage());
+        }
+    }
 }

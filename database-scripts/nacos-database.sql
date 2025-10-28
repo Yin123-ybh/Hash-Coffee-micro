@@ -176,3 +176,4 @@ INSERT INTO config_info (data_id, group_id, content, md5, gmt_create, gmt_modifi
 CREATE INDEX `idx_gmt_create` ON config_info(`gmt_create`);
 CREATE INDEX `idx_gmt_modified` ON config_info(`gmt_modified`);
 CREATE INDEX `idx_datum` ON config_info_aggr(`datum_id`);
+

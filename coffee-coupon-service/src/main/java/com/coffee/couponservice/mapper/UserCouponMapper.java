@@ -13,6 +13,11 @@ import java.util.List;
 public interface UserCouponMapper {
     
     /**
+     * 根据ID查询用户优惠券
+     */
+    UserCoupon selectById(@Param("id") Long id);
+    
+    /**
      * 根据用户ID和优惠券ID查询
      */
     UserCoupon selectByUserIdAndCouponId(@Param("userId") Long userId, @Param("couponId") Long couponId);

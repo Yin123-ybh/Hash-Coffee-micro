@@ -23,5 +23,11 @@ public interface CouponService {
      * 根据ID查询优惠券
      */
     Coupon getCouponById(Long id);
+    
+    /**
+     * 更新优惠券使用数量
+     */
+    void updateCouponUsedCount(Long id, Integer usedCount);
 }
+
 

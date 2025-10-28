@@ -62,9 +62,14 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             }
         }
         
-        // TODO: 临时跳过订单接口的认证，用于测试
-        if (path.startsWith("/order/")) {
-            log.warn("临时跳过订单接口认证: {}", path);
+        // TODO: 临时跳过订单接口和用户优惠券接口的认证，用于测试
+        if (path.startsWith("/order/") || path.startsWith("/user/coupons/")) {
+            log.warn("临时跳过接口认证: {}", path);
+            // 为测试添加模拟用户ID
+            newRequest = request.mutate()
+                    .header("X-User-Id", "100")
+                    .header("X-User-Name", "testuser")
+                    .build();
             return chain.filter(exchange.mutate().request(newRequest).build());
         }
         
@@ -103,6 +108,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
                 "/product/list",
                 "/product/recommended",
                 "/product/hot",
+                "/public/",
+                "/public/coupons",
                 "/product/"
         };
         

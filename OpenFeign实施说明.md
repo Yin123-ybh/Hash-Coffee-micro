@@ -314,3 +314,4 @@ DEBUG - --> GET http://coffee-product-service/product/list
 4. ✅ 提供了完整的使用示例
 
 现在可以在订单服务中使用 OpenFeign 调用其他微服务了！
+

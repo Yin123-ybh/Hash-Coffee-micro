@@ -29,3 +29,4 @@ public interface CouponSeckillService {
      */
     boolean checkUserSeckill(Long userId, Long couponId);
 }
+

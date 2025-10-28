@@ -28,6 +28,11 @@ public interface CouponMapper {
     int updateUsedCount(@Param("id") Long id, @Param("usedCount") Integer usedCount);
     
     /**
+     * 乐观锁更新使用数量（原子性操作）
+     */
+    int updateUsedCountOptimistic(@Param("id") Long id);
+    
+    /**
      * 插入优惠券
      */
     int insert(Coupon coupon);

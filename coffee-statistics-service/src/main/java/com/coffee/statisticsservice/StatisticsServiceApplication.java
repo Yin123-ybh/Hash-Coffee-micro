@@ -15,3 +15,12 @@ public class StatisticsServiceApplication {
         SpringApplication.run(StatisticsServiceApplication.class, args);
     }
 }
+
+
+
+
+
+
+
+
+

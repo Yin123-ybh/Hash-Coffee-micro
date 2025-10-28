@@ -36,5 +36,19 @@ public class CouponServiceImpl implements CouponService {
         log.info("查询优惠券: id={}", id);
         return couponMapper.selectById(id);
     }
+    
+    @Override
+    public void updateCouponUsedCount(Long id, Integer usedCount) {
+        log.info("更新优惠券使用数量: id={}, usedCount={}", id, usedCount);
+        couponMapper.updateUsedCount(id, usedCount);
+    }
 }
+
+
+
+
+
+
+
+
 

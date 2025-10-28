@@ -33,3 +33,12 @@ public class SeckillResult {
      */
     private String orderNo;
 }
+
+
+
+
+
+
+
+
+

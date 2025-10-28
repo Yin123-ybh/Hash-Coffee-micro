@@ -16,6 +16,13 @@
         id, user_id, coupon_id, status, used_time, order_id, create_time
     </sql>
 
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_coupons
+        WHERE id = #{id}
+    </select>
+
     <select id="selectByUserIdAndCouponId" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

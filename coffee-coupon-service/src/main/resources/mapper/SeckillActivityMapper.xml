@@ -1,79 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.coffee.couponservice.mapper.SeckillActivityMapper">
 
-    <resultMap id="ResultMap" type="com.coffee.couponservice.entity.SeckillActivity">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="description" property="description" jdbcType="VARCHAR"/>
-        <result column="coupon_id" property="couponId" jdbcType="BIGINT"/>
-        <result column="seckill_stock" property="seckillStock" jdbcType="INTEGER"/>
-        <result column="per_user_limit" property="perUserLimit" jdbcType="INTEGER"/>
-        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
-        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="coupon_name" property="couponName" jdbcType="VARCHAR"/>
-        <result column="coupon_type" property="couponType" jdbcType="TINYINT"/>
-    </resultMap>
-
-    <select id="selectSeckillList" resultMap="ResultMap">
-        SELECT 
-            s.id,
-            s.name,
-            s.description,
-            s.coupon_id,
-            s.seckill_stock,
-            s.per_user_limit,
-            s.start_time,
-            s.end_time,
-            s.status,
-            s.create_time,
-            s.update_time,
-            c.name as coupon_name,
-            c.type as coupon_type
-        FROM coupon_seckill_activity s
-        LEFT JOIN coupons c ON s.coupon_id = c.id
+    <!-- 统计满足条件的秒杀活动数量 -->
+    <select id="countSeckills" resultType="int">
+        SELECT COUNT(*) FROM seckill_activity
         <where>
             <if test="name != null and name != ''">
-                AND s.name LIKE CONCAT('%', #{name}, '%')
+                AND name = #{name}
             </if>
             <if test="status != null">
-                AND s.status = #{status}
+                AND status = #{status}
             </if>
             <if test="couponId != null">
-                AND s.coupon_id = #{couponId}
-            </if>
-        </where>
-        ORDER BY s.create_time DESC
-    </select>
-
-    <select id="countSeckills" resultType="long">
-        SELECT COUNT(1)
-        FROM coupon_seckill_activity s
-        <where>
-            <if test="name != null and name != ''">
-                AND s.name LIKE CONCAT('%', #{name}, '%')
-            </if>
-            <if test="status != null">
-                AND s.status = #{status}
-            </if>
-            <if test="couponId != null">
-                AND s.coupon_id = #{couponId}
+                AND coupon_id = #{couponId}
             </if>
         </where>
     </select>
-
-    <insert id="insert" parameterType="com.coffee.couponservice.entity.SeckillActivity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO coupon_seckill_activity (
-            name, description, coupon_id, seckill_stock, per_user_limit,
-            start_time, end_time, status, create_time, update_time
-        ) VALUES (
-            #{name}, #{description}, #{couponId}, #{seckillStock}, #{perUserLimit},
-            #{startTime}, #{endTime}, #{status}, NOW(), NOW()
-        )
-    </insert>
 
 </mapper>
-

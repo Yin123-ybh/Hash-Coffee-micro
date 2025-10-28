@@ -45,6 +45,16 @@
             update_time = NOW()
         WHERE id = #{id}
     </update>
+    
+    <!-- 乐观锁更新使用数量 -->
+    <update id="updateUsedCountOptimistic">
+        UPDATE coupons
+        SET used_count = used_count + 1,
+            update_time = NOW()
+        WHERE id = #{id} 
+        AND used_count &lt; total_count
+        AND status = 1
+    </update>
 
     <insert id="insert" parameterType="com.coffee.couponservice.entity.Coupon" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO coupons (

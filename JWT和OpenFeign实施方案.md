@@ -198,3 +198,12 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 2. **请求日志**：记录JWT验证和服务调用日志
 3. **性能监控**：监控JWT验证和服务调用的耗时
 4. **熔断降级**：使用Sentinel或Hystrix进行服务降级
+
+
+
+
+
+
+
+
+

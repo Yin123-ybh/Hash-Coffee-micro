@@ -23,3 +23,11 @@ public interface ProductServiceClient {
     @GetMapping("/product/list")
     Result<Object> getProductList();
 }
+
+
+
+
+
+
+
+

@@ -38,3 +38,11 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         }
     }
 }
+
+
+
+
+
+
+
+

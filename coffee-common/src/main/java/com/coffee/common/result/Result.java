@@ -77,19 +77,5 @@ public class Result<T> {
     public static <T> Result<T> notFound(String message) {
         return new Result<>(404, message, null);
     }
-    
-    /**
-     * 判断是否成功
-     */
-    public boolean isSuccess() {
-        return this.code != null && this.code == 200;
-    }
 }
-
-
-
-
-
-
-
 

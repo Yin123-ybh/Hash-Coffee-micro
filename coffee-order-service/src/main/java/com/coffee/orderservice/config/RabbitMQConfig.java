@@ -199,11 +199,3 @@ public class RabbitMQConfig {
     }
 }
 
-
-
-
-
-
-
-
-

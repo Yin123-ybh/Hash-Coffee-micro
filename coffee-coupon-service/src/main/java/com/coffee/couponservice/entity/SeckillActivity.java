@@ -38,11 +38,3 @@ public class SeckillActivity {
 }
 
 
-
-
-
-
-
-
-
-

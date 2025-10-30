@@ -32,11 +32,3 @@ CREATE TABLE IF NOT EXISTS coupon_seckill_participant (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='秒杀参与记录表';
 
 
-
-
-
-
-
-
-
-

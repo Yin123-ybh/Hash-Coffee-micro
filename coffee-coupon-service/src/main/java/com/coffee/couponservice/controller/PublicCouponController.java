@@ -1,8 +1,6 @@
 package com.coffee.couponservice.controller;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.coffee.common.result.Result;
-import com.coffee.couponservice.handler.SentinelFallbackHandler;
 import com.coffee.couponservice.service.CouponQueryService;
 import com.coffee.couponservice.vo.PublicCouponVO;
 import lombok.extern.slf4j.Slf4j;
@@ -29,30 +27,14 @@ public class PublicCouponController {
 
     /**
      * 获取当前可领取/可用的优惠券列表（适配小程序字段名）
-     * 
-     * @SentinelResource 注解说明：
-     * - value: 资源名称，用于流量控制和熔断降级
-     * - blockHandler: 流控触发时的降级处理方法
-     * - fallback: 业务异常时的降级处理方法
-     * - blockHandlerClass: 降级处理类
      */
     @GetMapping("/available")
-    @SentinelResource(
-        value = "queryCoupon",
-        blockHandler = "getAvailableCouponsBlockHandler",
-        fallback = "getAvailableCouponsFallback",
-        blockHandlerClass = SentinelFallbackHandler.class
-    )
     public Result<List<PublicCouponVO>> getAvailableCoupons() {
         try {
-            log.info("🔍 开始查询可用优惠券列表");
-            List<PublicCouponVO> coupons = couponQueryService.listAvailableCoupons();
-            log.info("✅ 查询到 {} 个可用优惠券", coupons.size());
-            return Result.success(coupons);
+            return Result.success(couponQueryService.listAvailableCoupons());
         } catch (Exception e) {
-            log.error("💥 查询可用优惠券失败: {}", e.getMessage(), e);
-            // 这里抛出异常，会触发fallback方法
-            throw new RuntimeException("查询优惠券服务异常", e);
+            log.error("查询可用优惠券失败: {}", e.getMessage(), e);
+            return Result.success(Collections.emptyList());
         }
     }
 }

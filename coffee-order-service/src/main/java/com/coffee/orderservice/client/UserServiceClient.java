@@ -22,19 +22,5 @@ public interface UserServiceClient {
      */
     @GetMapping("/user/{id}")
     Result<Object> getUserById(@PathVariable("id") Long id);
-
-    /**
-     * 根据地址ID获取地址详情
-     */
-
-    @GetMapping("/address/{addressId}")
-    Result<Object> getAddressById(@PathVariable("addressId") Long addressId);
 }
-
-
-
-
-
-
-
 

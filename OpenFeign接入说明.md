@@ -160,11 +160,3 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 
 请根据你的具体业务需求决定是否需要OpenFeign。
 
-
-
-
-
-
-
-
-

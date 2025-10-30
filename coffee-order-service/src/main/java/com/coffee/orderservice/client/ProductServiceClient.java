@@ -24,10 +24,3 @@ public interface ProductServiceClient {
     Result<Object> getProductList();
 }
 
-
-
-
-
-
-
-

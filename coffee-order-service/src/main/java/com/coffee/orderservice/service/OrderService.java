@@ -7,7 +7,7 @@ import java.util.Map;
  * 职责：定义订单业务逻辑方法
  */
 public interface OrderService {
-
+    
     /**
      * 创建订单
      * @param orderData 订单数据
@@ -17,3 +17,4 @@ public interface OrderService {
      */
     Map<String, Object> createOrder(Map<String, Object> orderData, Long userId) throws IllegalArgumentException;
 }
+

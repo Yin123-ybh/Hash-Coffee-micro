@@ -24,11 +24,3 @@ public class SeckillRequest {
     private Integer quantity;
 }
 
-
-
-
-
-
-
-
-

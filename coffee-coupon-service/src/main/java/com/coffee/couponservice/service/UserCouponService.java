@@ -44,10 +44,3 @@ public interface UserCouponService {
     boolean useCoupon(Long userCouponId, Long userId, Long orderId);
 }
 
-
-
-
-
-
-
-
